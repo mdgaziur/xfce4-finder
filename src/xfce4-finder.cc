@@ -1188,6 +1188,12 @@ void on_search_text_change(){
     }
 }
 
+// closes the window when fired
+bool on_focus_out(GdkEventFocus *event) {
+    p_main_window->close();
+    return true;
+}
+
 //method for applying a css file
 void apply_css(const Glib::ustring css_file){
     Glib::RefPtr<Gtk::CssProvider> p_css_provider = Gtk::CssProvider::create();
@@ -1267,6 +1273,10 @@ int main(int argc, char ** argv){
 
 	//retrieve pointer to main window
 	p_builder->get_widget("MainWindow", p_main_window);
+
+    // add listener that closes the window when it loses focus
+    p_main_window->add_events(Gdk::FOCUS_CHANGE_MASK);
+    p_main_window->signal_focus_out_event().connect(sigc::ptr_fun(&on_focus_out));
 
 	//retrive pointer to search text
 	p_builder->get_widget("SearchText", p_search_text);
