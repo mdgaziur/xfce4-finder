@@ -45,7 +45,7 @@ Gtk::Entry * p_search_arguments = nullptr;
 Gtk::Box * p_arguments_layout = nullptr;
 std::vector<Glib::ustring> directories;
 Glib::ustring file_extension(".desktop");
-Glib::ustring web_search("https://www.duckduckgo.com/%s");
+Glib::ustring web_search("https://www.google.com/#safe=on&q=%s");
 Glib::ustring theme("default");
 int results_limit;
 bool verbose = false;
