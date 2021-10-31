@@ -57,7 +57,6 @@ struct SearchEntry {
     Glib::ustring directory;
     std::size_t position;
     Glib::ustring name;
-    Glib::ustring description;
     Glib::ustring exec;
     Glib::ustring icon;
 };
@@ -98,14 +97,12 @@ class AutocompleteColumns : public Gtk::TreeModel::ColumnRecord {
     public:
     Gtk::TreeModelColumn< Glib::RefPtr<Gdk::Pixbuf> > icon;
     Gtk::TreeModelColumn<Glib::ustring> name;
-    Gtk::TreeModelColumn<Glib::ustring> description;
 
     Gtk::TreeModelColumn<SearchEntry> data;
 
     AutocompleteColumns(){
         add(icon);
         add(name);
-        add(description);
         add(data);
     }
 
@@ -486,13 +483,13 @@ inline ExecSpec parse_exec_path(const Glib::ustring& exec_path){
         else{
 
             /*
-            %f	A single file name, even if multiple files are selected. The system reading the desktop entry should recognize that the program in question cannot handle multiple file arguments, and it should should probably spawn and execute multiple copies of a program for each selected file if the program is not able to handle additional file arguments. If files are not on the local file system (i.e. are on HTTP or FTP locations), the files will be copied to the local file system and %f will be expanded to point at the temporary file. Used for programs that do not understand the URL syntax.
-            %F	A list of files. Use for apps that can open several local files at once. Each file is passed as a separate argument to the executable program.
-            %u	A single URL. Local files may either be passed as file: URLs or as file path.
-            %U	A list of URLs. Each URL is passed as a separate argument to the executable program. Local files may either be passed as file: URLs or as file path.
-            %i	The Icon key of the desktop entry expanded as two arguments, first --icon and then the value of the Icon key. Should not expand to any arguments if the Icon key is empty or missing.
-            %c	The translated name of the application as listed in the appropriate Name key in the desktop entry.
-            %k	The location of the desktop file as either a URI (if for example gotten from the vfolder system) or a local filename or empty if no location is known.
+            %f  A single file name, even if multiple files are selected. The system reading the desktop entry should recognize that the program in question cannot handle multiple file arguments, and it should should probably spawn and execute multiple copies of a program for each selected file if the program is not able to handle additional file arguments. If files are not on the local file system (i.e. are on HTTP or FTP locations), the files will be copied to the local file system and %f will be expanded to point at the temporary file. Used for programs that do not understand the URL syntax.
+            %F  A list of files. Use for apps that can open several local files at once. Each file is passed as a separate argument to the executable program.
+            %u  A single URL. Local files may either be passed as file: URLs or as file path.
+            %U  A list of URLs. Each URL is passed as a separate argument to the executable program. Local files may either be passed as file: URLs or as file path.
+            %i  The Icon key of the desktop entry expanded as two arguments, first --icon and then the value of the Icon key. Should not expand to any arguments if the Icon key is empty or missing.
+            %c  The translated name of the application as listed in the appropriate Name key in the desktop entry.
+            %k  The location of the desktop file as either a URI (if for example gotten from the vfolder system) or a local filename or empty if no location is known.
             */
 
             //replace execution variables
@@ -816,9 +813,9 @@ bool on_search_arguments_key_press(const GdkEventKey * key_event){
 
     if(key_event->keyval == GDK_KEY_Escape){
 
-		p_application->quit();
+        p_application->quit();
         return true;
-	}
+    }
 
     if(key_event->keyval == GDK_KEY_Tab){
 
@@ -898,11 +895,11 @@ bool on_search_text_key_press(const GdkEventKey * key_event){
 
     }
 
-	if(key_event->keyval == GDK_KEY_Escape){
+    if(key_event->keyval == GDK_KEY_Escape){
 
-		p_application->quit();
+        p_application->quit();
         return true;
-	}
+    }
 
     if(key_event->keyval == GDK_KEY_Up){
 
@@ -940,13 +937,13 @@ bool on_search_text_key_press(const GdkEventKey * key_event){
         selection->select(iter);
     }
 
-	return false;
+    return false;
 }
 
 //handle SearchText change events
 void on_search_text_change(){
 
-	Glib::ustring search_text = p_search_text->get_text();
+    Glib::ustring search_text = p_search_text->get_text();
     std::vector<SearchEntry> matches;
     std::unordered_map<std::string, bool> registry;
 
@@ -1036,16 +1033,6 @@ void on_search_text_change(){
                     //remove from stack
                     matches.pop_back();
                     continue;
-                }
-
-                //check description
-                try{
-                    p_search_entry->description = file.get_locale_string(
-                        group_name, Glib::ustring("Comment")
-                    );
-                }
-                catch(const Glib::Error& ex){
-                    p_search_entry->description = "";
                 }
 
                 //get exec
@@ -1146,7 +1133,6 @@ void on_search_text_change(){
             }
 
             row[autocomplete_columns.name] = p_entry->name;
-            row[autocomplete_columns.description] = p_entry->description;
             row[autocomplete_columns.data] = *p_entry;
         }
 
@@ -1249,38 +1235,38 @@ int main(int argc, char ** argv){
     }
 
     //create application instance
-	p_application = Gtk::Application::create("com.collaboradev.xfce4-finder");
+    p_application = Gtk::Application::create("com.collaboradev.xfce4-finder");
 
     //create builder reference for glade
-	p_builder = Gtk::Builder::create();
+    p_builder = Gtk::Builder::create();
 
     //load glade
-	try{
+    try{
         p_builder->add_from_string(GLADE_XML);
-	}
-	catch(const Glib::FileError& ex){
-		std::cerr << "Glade FileError: " << ex.what() << std::endl;
-		return EXIT_FAILURE;
-	}
-	catch(const Glib::MarkupError& ex){
-    	std::cerr << "Glade Markup_error: " << ex.what() << std::endl;
-    	return EXIT_FAILURE;
-  	}
-  	catch(const Gtk::BuilderError& ex){
-    	std::cerr << "Glade BuilderError: " << ex.what() << std::endl;
-    	return EXIT_FAILURE;
-  	}
+    }
+    catch(const Glib::FileError& ex){
+        std::cerr << "Glade FileError: " << ex.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+    catch(const Glib::MarkupError& ex){
+        std::cerr << "Glade Markup_error: " << ex.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+    catch(const Gtk::BuilderError& ex){
+        std::cerr << "Glade BuilderError: " << ex.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 
-	//retrieve pointer to main window
-	p_builder->get_widget("MainWindow", p_main_window);
+    //retrieve pointer to main window
+    p_builder->get_widget("MainWindow", p_main_window);
 
     // add listener that closes the window when it loses focus
     p_main_window->add_events(Gdk::FOCUS_CHANGE_MASK);
     p_main_window->signal_focus_out_event().connect(sigc::ptr_fun(&on_focus_out));
 
-	//retrive pointer to search text
-	p_builder->get_widget("SearchText", p_search_text);
-	p_search_text->signal_changed().connect( sigc::ptr_fun(&on_search_text_change) );
+    //retrive pointer to search text
+    p_builder->get_widget("SearchText", p_search_text);
+    p_search_text->signal_changed().connect( sigc::ptr_fun(&on_search_text_change) );
     p_search_text->signal_key_press_event().connect( sigc::ptr_fun(&on_search_text_key_press), false );
     p_search_text->signal_activate().connect( sigc::ptr_fun(&on_activate) );
     p_search_text->signal_icon_press().connect( sigc::ptr_fun(&on_search_text_icon_press) );
@@ -1318,7 +1304,6 @@ int main(int argc, char ** argv){
     p_autocomplete->set_model(p_list_store);
     p_autocomplete->append_column("Icon", autocomplete_columns.icon);
     p_autocomplete->append_column("Name", autocomplete_columns.name);
-    p_autocomplete->append_column("Description", autocomplete_columns.description);
 
 
     p_autocomplete->signal_row_activated().connect( sigc::ptr_fun(&on_row_activated) );
@@ -1351,11 +1336,11 @@ int main(int argc, char ** argv){
     load_channel_settings();
 
     //run main application
-	p_application->run(*p_main_window);
+    p_application->run(*p_main_window);
 
     xfconf_shutdown();
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
 

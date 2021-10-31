@@ -1,60 +1,48 @@
 * {
-	border-radius: 0;
-	-gtkmm__CustomObject_finder-width: 1000;
-	-gtkmm__CustomObject_finder-height: 370;
+	-gtkmm__CustomObject_finder-width: 450;
+	-gtkmm__CustomObject_finder-height: 500;
 	-gtkmm__CustomObject_finder-results: 10;
 }
 
 #search-icon {
-    padding-left: 10px;
+	background-color: rgba(255, 255, 255, 0.05);
+	padding-left: 10px;
     padding-right: 10px;
-    background-image: -gtk-gradient(linear, left top, left bottom, from(#cfcfcf), to (#fff));
-	border: none;
-	border-bottom: solid 1px #afafaf;
-    transition: none;
+    border: none;
 }
 
 #search-text {
-    font-size: 25px;
-    padding: 20px;
+    font-size: 18px;
+    padding: 15px;
 	padding-left: 0;
+	background-color: rgba(255,255,255,0.05);
 	border: none;
-	background-image: -gtk-gradient(linear, left top, left bottom, from(#cfcfcf), to (#fff));
 	border: none;
-	border-bottom: solid 1px #afafaf;
 	transition: none;
-	color: #333;
+	color: #ccc;
 }
 
 #search-application {
-	font-size: 25px;
+	font-size: 20px;
 	padding: 20px;
 	padding-left: 0;
-	background-image: -gtk-gradient(linear, left top, left bottom, from(#fff), to (#cfcfcf));
 	border: none;
-	border-bottom: solid 1px #afafaf;
 }
 
 #search-arguments-icon {
 	padding-left: 10px;
 	padding-right: 10px;
 	border: none;
-	border-bottom: solid 1px #afafaf;
 	transition: none;
-	background-image: -gtk-gradient(linear, left top, left bottom, from(#fff), to (#cfcfcf));
 }
 
 #search-arguments {
-	font-size: 25px;
+	font-size: 20px;
 	padding: 20px;
-	background-image: -gtk-gradient(linear, left top, left bottom, from(#cfcfcf), to (#fff));
 	border: none;
-	border-bottom: solid 1px #afafaf;
-	color: #333;
 }
 
-#search-text:focus,
-#search-arguments:focus {
+#search-text:focus,#search-arguments:focus {
 	box-shadow: none;
 }
 
@@ -67,7 +55,8 @@
 }
 
 #autocomplete {
-	font-size: 20px;
-	color: #404040;
+	padding: 10px;
+	font-size: 16px;
+	color: #eee;
 	border: none;
 }
